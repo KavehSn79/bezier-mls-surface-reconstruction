@@ -1,0 +1,26 @@
+.vscode/
+*.suo
+*.user
+x64/
+Debug/
+Release/
+
+# Build
+build/
+out/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CppProperties.json
+CMakeSettings.json
+*.obj
+*.o
+*.exe
+*.dll
+*.pdb
+*.lib
+
+# OS
+.DS_Store
+Thumbs.db
