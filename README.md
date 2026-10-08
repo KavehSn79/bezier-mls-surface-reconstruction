@@ -8,19 +8,19 @@ Developed as part of **Computer Graphics 2** at **Technische Universität Berlin
 
 ## Gallery
 
-### Bézier surface
+### Bézier Surface
 ![Bézier surface reconstructed from scattered points](docs/images/bezier-surface.png)
 
-### Moving Least Squares surface
+### Moving Least Squares Surface
 ![MLS surface reconstructed from scattered points](docs/images/mls-surface.png)
 
-### MLS normal visualization
+### MLS Normal Visualization
 ![Moving Least Squares surface with estimated normals](docs/images/mls-normals.png)
 
-### Bézier tangents and normals
+### Bézier Tangents and Normals
 ![Bézier surface with tangent and normal vectors](docs/images/bezier-normals-tangents.png)
 
-### Input point cloud and control grid
+### Input Point Cloud and Control Grid
 ![Scattered input points and fitted control grid](docs/images/control-grid.png)
 
 ## Features
@@ -33,7 +33,6 @@ Developed as part of **Computer Graphics 2** at **Technische Universität Berlin
 - **MLS surface reconstruction:** Evaluate local quadratic fits on a denser grid to generate a polygonal height-field surface.
 - **MLS normal approximation:** Estimate normals from the derivatives of the locally fitted polynomials.
 - **Interactive visualization:** Toggle points, control meshes, surfaces, tangents, and normals using **Polyscope** and **ImGui** controls.
-- **Benchmark mode:** Optional timing mode for spatial queries when loading a point set.
 
 ## Algorithms
 
@@ -45,7 +44,7 @@ At each query position `(x, y)`, neighboring samples are collected within a user
 z(x,y) = a_0 + a_1 x + a_2 y + a_3 x^2 + a_4 xy + a_5 y^2
 ```
 
-using a compactly supported Wendland weight
+using a compactly supported Wendland weight:
 
 ```math
 w(q) = (1-q)^4(4q+1), \quad 0 \le q \le 1
@@ -53,15 +52,15 @@ w(q) = (1-q)^4(4q+1), \quad 0 \le q \le 1
 
 with zero weight outside the support, where `q` is the normalized XY distance.
 
-### Tensor-product Bézier surface
+### Tensor-product Bézier Surface
 
 A lower-resolution fitted grid is used as the Bézier control net. The surface is evaluated using the **1D de Casteljau algorithm** first in one parameter direction and then in the other. Tangent vectors are computed during evaluation, and normals are estimated from their cross product.
 
-### Moving Least Squares surface
+### Moving Least Squares Surface
 
 For the MLS result, the application creates a denser grid and fits a new local quadratic polynomial at every grid vertex. The resulting heights are assembled into a quad mesh. Normals are approximated from the local polynomial derivatives.
 
-> Note: the implementation treats the surfaces as **height fields** `z = f(x, y)`. It is therefore intended for surfaces that can be represented over a planar XY domain.
+> **Note:** The implementation treats the surfaces as **height fields** `z = f(x, y)`. It is therefore intended for surfaces that can be represented over a planar XY domain.
 
 ## Tech Stack
 
@@ -95,18 +94,42 @@ sudo apt install build-essential cmake git xorg-dev libglu1-mesa-dev freeglut3-d
 ### Windows
 
 Install:
+
 - **Visual Studio 2022** with **Desktop development with C++**
 - **CMake**
 - **Git**
 
-### Build commands
+### Build Commands
+
+Clone the repository:
+
+```bash
+git clone https://github.com/KavehSn79/bezier-mls-surface-reconstruction.git
+cd bezier-mls-surface-reconstruction
+```
+
+Configure and build:
 
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release --parallel
 ```
 
-The executable target is named **`ex1`** (inherited from the course framework).
+The executable target is named **`surface_reconstruction`**.
+
+### Run the Application
+
+**Windows (Visual Studio):**
+
+```powershell
+.\build\bin\Release\surface_reconstruction.exe
+```
+
+**Linux:**
+
+```bash
+./build/bin/surface_reconstruction
+```
 
 ## Usage
 
@@ -117,12 +140,6 @@ The executable target is named **`ex1`** (inherited from the course framework).
 5. Toggle **Bézier Surface** and adjust its **Subdivision**.
 6. Toggle **MLS Surface** and adjust its subdivision and support radius.
 7. Enable **Show Normals** or **Show Tangents** as needed.
-
-If supported in your version, benchmark mode can be enabled via:
-
-```bash
-./ex1 --benchmark
-```
 
 ## Project Structure
 
@@ -139,8 +156,9 @@ If supported in your version, benchmark mode can be enabled via:
 ├── visualization/
 │   ├── visuals.h
 │   └── visuals.cpp                  # Visualization helpers
-├── benchmark/                       # Benchmark utilities
+├── benchmark/                       # Spatial-query utilities
 ├── pointdata/pointdata/             # Example OFF datasets
+├── docs/images/                     # Result screenshots
 ├── CMakeLists.txt
 └── README.md
 ```
@@ -150,8 +168,11 @@ If supported in your version, benchmark mode can be enabled via:
 - The quadratic basis has **six coefficients**, so fitting requires enough nearby samples.
 - Distances for the weighting function are computed in the **XY domain**, matching the height-field formulation.
 - The interactive workflow uses **local weighted fitting**, while some utility functions also support ordinary least squares.
+- MLS normals are approximated using local polynomial derivatives rather than the exact derivatives of the moving MLS surface.
 - The repository builds on a course-provided C++ / Polyscope scaffold, with the project-specific approximation and visualization logic implemented in the source files above.
 
 ## Acknowledgments
 
-Developed for **Computer Graphics 2** at **TU Berlin** under **Prof. Dr. Marc Alexa**. The project uses [Polyscope](https://polyscope.run/) for visualization and [Eigen](https://eigen.tuxfamily.org/) for linear algebra.
+Developed for **Computer Graphics 2** at **TU Berlin** under **Prof. Dr. Marc Alexa**.
+
+The project uses [Polyscope](https://polyscope.run/) for interactive 3D visualization and [Eigen](https://eigen.tuxfamily.org/) for linear algebra.
