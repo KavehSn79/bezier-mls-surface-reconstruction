@@ -2,7 +2,7 @@
 
 cmake_minimum_required(VERSION 3.14)
 
-project(cg2-exercises LANGUAGES CXX)
+project(BezierMLSSurfaceReconstruction LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -91,7 +91,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(eigen)
 
 # Create an executable
-add_executable(ex1
+add_executable(surface_reconstruction
   main.cpp
   benchmark/benchmark.cpp
   spatial/spatial_data_structure.cpp
@@ -99,8 +99,8 @@ add_executable(ex1
  "surface/surface.cpp" "surface/surface.h")
 
 # Add header-only dependencies
-target_include_directories(ex1 PRIVATE "${polyscope_SOURCE_DIR}/deps/args")
-target_include_directories(ex1 PRIVATE "${polyscope_SOURCE_DIR}/deps/json/include")
+target_include_directories(surface_reconstruction PRIVATE "${polyscope_SOURCE_DIR}/deps/args")
+target_include_directories(surface_reconstruction PRIVATE "${polyscope_SOURCE_DIR}/deps/json/include")
 
 # Link to dependencies
-target_link_libraries(ex1 polyscope portable_file_dialogs Eigen3::Eigen)
+target_link_libraries(surface_reconstruction polyscope portable_file_dialogs Eigen3::Eigen)
